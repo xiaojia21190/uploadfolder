@@ -10,12 +10,15 @@ Upload 100T files for paper search and storage system based on Irys
 ### 2. 上传论文
 - 创建 `pdf` 文件夹并放入要上传的论文
 - 创建 `json` 文件夹存放论文元数据
+```bash
 node upload.js
+```
 将 pdf 文件夹中的论文上传到 Irys
 
 ### 3. 生成元数据
-
+```bash
 node getmetadata.js
+```
 
 ### 4. 上传元数据
 ```bash
