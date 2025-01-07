@@ -1,0 +1,26 @@
+# 依赖
+node_modules/
+
+# 环境变量
+.env
+
+# 数据文件
+metadata-id.json
+manifest.json
+metadata.json
+
+# 数据目录
+pdf/
+json/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+pdf-errors.txt
+
+# IDE配置
+.idea/
+.vscode/
