@@ -1,54 +1,35 @@
 async function getMetadata() {
     try {
-        // GraphQL 查询
         const query = `
             query {
                 transactions(
-                    first: 1,
                     tags: [
-                        { name: "Content-Type", values: ["application/json"] },
                         { name: "App-Name", values: ["SciQuery"] },
-                        { name: "Type", values: ["metadata-index"] },
-                        { name: "Collection", values: ["sciquery1"] }
+                        { name: "Collection", values: ["sciquery2"] }
                     ]
                 ) {
                     edges {
                         node {
                             id
-                            tags {
-                                name
-                                value
-                            }
                         }
                     }
                 }
             }
         `;
 
-        // 使用正确的 GraphQL endpoint
         const response = await fetch('https://uploader.irys.xyz/graphql', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query })
         });
 
         const result = await response.json();
-        console.log('GraphQL Response:', result);
+        const id = result.data?.transactions?.edges?.[0]?.node?.id;
+        if (!id) throw new Error('No metadata found');
 
-        if (!result.data?.transactions?.edges?.length) {
-            throw new Error('No metadata found');
-        }
-
-        const metadataId = result.data.transactions.edges[0].node.id;
-        console.log('Found metadata ID:', metadataId);
-
-        // 获取实际的 metadata 内容
-        const metadataResponse = await fetch(`https://gateway.irys.xyz/${metadataId}`);
+        const metadataResponse = await fetch(`https://gateway.irys.xyz/${id}`);
         const metadata = await metadataResponse.json();
-        console.log('Metadata loaded successfully');
-        return metadata;
+        return metadata[0]; // 直接返回第一个对象，它包含了所有论文数据
 
     } catch (error) {
         console.error('Error fetching metadata:', error);
@@ -69,21 +50,21 @@ async function search() {
         return;
     }
     
-    const results = Object.entries(metadata).filter(([_, paper]) => {
+    const papers = Object.values(metadata);
+    const results = papers.filter(paper => {
+        if (!paper || typeof paper !== 'object') return false;
+        
         switch (searchType) {
             case 'doi':
-                return paper.doi.toLowerCase().includes(searchInput);
+                return paper.doi?.toLowerCase().includes(searchInput);
             case 'title':
-                return paper.title.toLowerCase().includes(searchInput);
+                return paper.title?.toLowerCase().includes(searchInput);
             case 'author':
-                return paper.author.toLowerCase().includes(searchInput);
+                return paper.author?.toLowerCase().includes(searchInput);
             default:
                 return false;
         }
-    }).map(([id, paper]) => ({
-        ...paper,
-        downloadUrl: `https://gateway.irys.xyz/${id}`
-    }));
+    });
     
     if (results.length === 0) {
         resultsDiv.innerHTML = '<p>未找到匹配的论文</p>';
@@ -92,10 +73,10 @@ async function search() {
     
     resultsDiv.innerHTML = results.map(paper => `
         <div class="paper-item">
-            <div class="paper-title">${paper.title}</div>
-            <div class="paper-info">作者: ${paper.author}</div>
-            <div class="paper-info">DOI: ${paper.doi}</div>
-            <a href="${paper.downloadUrl}" class="paper-link" target="_blank">下载论文</a>
+            <div class="paper-title">${paper.title || ''}</div>
+            <div class="paper-info">作者: ${paper.author || ''}</div>
+            <div class="paper-info">DOI: ${paper.doi || ''}</div>
+            <a href="https://gateway.irys.xyz/${paper.irysid}" class="paper-link" target="_blank">下载论文</a>
         </div>
     `).join('');
 } 

@@ -1,0 +1,44 @@
+# 依赖目录
+node_modules/
+
+# 环境变量
+.env
+
+# 数据文件
+metadata-id.json
+manifest.json
+metadata.json
+100file.json
+testpdf-id.txt
+testpdf-manifest.csv
+
+# JSON文件目录
+json/
+json/**/*.json
+
+# PDF文件目录
+testpdf/
+pdf/
+
+# IDE相关
+.vscode/
+.idea/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+pdf-errors.txt
+
+# yarn相关
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# 临时文件
+*.tmp
+*.temp
