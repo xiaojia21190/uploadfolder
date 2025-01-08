@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # uploadfolder
 Upload 100T files for paper search and storage system based on Irys
 
@@ -34,3 +35,6 @@ node query.js
 - DOI
 - 标题关键词
 - 作者姓名
+=======
+Directly searching PDF by irys query
+>>>>>>> 26089003ba314997ae87b682ba842ade35350e1f
