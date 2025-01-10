@@ -42,3 +42,12 @@ pdf-errors.txt
 # 临时文件
 *.tmp
 *.temp
+
+# Test files to ignore
+testpdf-manifest.json
+testpdf-manifest.csv
+testpdf-id.txt
+manifest.json
+metadata-id.json
+metadata.json
+testpdf/
