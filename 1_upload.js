@@ -2,8 +2,10 @@ require("dotenv").config(); // 加载 .env 文件中的环境变量
 const { Uploader } = require("@irys/upload");
 const { Solana } = require("@irys/upload-solana");
 const fs = require("fs");
+const fsPromises = require('fs').promises;
 const path = require("path");
 const BigNumber = require("bignumber.js");
+const fetch = require('node-fetch');
 
 const getIrysUploader = async () => {
   try {
@@ -98,10 +100,7 @@ const uploadFolder = async () => {
       Manifest ID: ${response.id}
       访问地址: https://gateway.irys.xyz/${response.id}`);
 
-    // 添加下载 manifest 的代码
-    const fetch = require('node-fetch');
-    const fs = require('fs').promises;
-    
+    // 下载 manifest
     try {
       const manifestUrl = `https://gateway.irys.xyz/${response.id}`;
       console.log('正在下载 manifest...');
@@ -112,7 +111,7 @@ const uploadFolder = async () => {
       }
       
       const manifestData = await manifestResponse.text();
-      await fs.writeFile('manifest.json', manifestData);
+      await fsPromises.writeFile('manifest.json', manifestData);
       console.log('manifest.json 已下载并保存');
       
       // 可选：解析并显示文件数量

@@ -9,7 +9,7 @@ if (!fs.existsSync(outputDir)) {
 }
 
 // 生成所有 PDF
-async function generateAllPDFs(count = 75) {
+async function generateAllPDFs(count = 70) {
     console.log(`开始生成 ${count} 个PDF文件...`);
     
     for (let i = 1; i <= count; i++) {
