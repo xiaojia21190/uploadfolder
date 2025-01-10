@@ -72,23 +72,26 @@ const uploadFolder = async () => {
   }
 
   try {
-    // 1. 计算文件夹大小
+    // 添加文件检查
+    const files = fs.readdirSync(folderToUpload).filter(f => f.endsWith('.pdf'));
+    console.log(`准备上传的文件数量: ${files.length}`);
+    
     const folderSize = getFolderSize(folderToUpload);
     console.log(`文件夹总大小: ${(folderSize / 1024 / 1024).toFixed(2)} MB`);
 
-    // 2. 进行 Lazy-Funding
     const fundingSuccess = await lazyFund(irys, folderSize);
     if (!fundingSuccess) {
       console.error("充值失败，终止上传");
       return;
     }
 
-    // 3. 开始上传
+    // 修改上传选项，强制重新上传
     console.log("\n开始上传文件夹...");
     const response = await irys.uploadFolder(folderToUpload, {
-      indexFile: "",
-      batchSize: 5,
-      keepDeleted: false,
+      indexFile: "",  // 不使用索引文件
+      batchSize: 5,   // 每批上传5个文件
+      keepDeleted: false,  // 不保留已删除的文件
+      manifestName: `manifest-${Date.now()}.json`,  // 使用时间戳创建新的 manifest
     });
 
     console.log(`\n文件夹上传成功！
@@ -97,9 +100,6 @@ const uploadFolder = async () => {
 
   } catch (error) {
     console.error("上传文件夹时发生错误：", error);
-    if (fs.existsSync('pdf-errors.txt')) {
-      console.log("详细错误信息请查看 pdf-errors.txt");
-    }
   }
 };
 

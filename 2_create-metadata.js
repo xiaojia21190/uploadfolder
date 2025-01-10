@@ -2,11 +2,16 @@ const fs = require('fs');
 
 // 读取文件
 const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
-const papers = JSON.parse(fs.readFileSync('100file.json', 'utf8'));
+const papers = JSON.parse(fs.readFileSync('200file.json', 'utf8'));
 
 // 获取所有 irysid，按文件名数字排序
 const sortedIrysIds = Object.entries(manifest.paths)
-    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+    .sort((a, b) => {
+        // 将文件名转换为带前导零的三位数进行比较
+        const numA = String(parseInt(a[0])).padStart(3, '0');
+        const numB = String(parseInt(b[0])).padStart(3, '0');
+        return numA.localeCompare(numB);
+    })
     .map(([_, details]) => details.id);
 
 // 创建一个对象
