@@ -98,6 +98,35 @@ const uploadFolder = async () => {
       Manifest ID: ${response.id}
       访问地址: https://gateway.irys.xyz/${response.id}`);
 
+    // 添加下载 manifest 的代码
+    const fetch = require('node-fetch');
+    const fs = require('fs').promises;
+    
+    try {
+      const manifestUrl = `https://gateway.irys.xyz/${response.id}`;
+      console.log('正在下载 manifest...');
+      
+      const manifestResponse = await fetch(manifestUrl);
+      if (!manifestResponse.ok) {
+        throw new Error(`下载失败: ${manifestResponse.statusText}`);
+      }
+      
+      const manifestData = await manifestResponse.text();
+      await fs.writeFile('manifest.json', manifestData);
+      console.log('manifest.json 已下载并保存');
+      
+      // 可选：解析并显示文件数量
+      try {
+        const manifest = JSON.parse(manifestData);
+        const fileCount = Object.keys(manifest.paths || {}).length;
+        console.log(`manifest 包含 ${fileCount} 个文件记录`);
+      } catch (parseError) {
+        console.warn('无法解析 manifest 内容:', parseError);
+      }
+    } catch (downloadError) {
+      console.error('下载或保存 manifest 时出错:', downloadError);
+    }
+
   } catch (error) {
     console.error("上传文件夹时发生错误：", error);
   }
