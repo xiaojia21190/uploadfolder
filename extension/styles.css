@@ -1,0 +1,63 @@
+.container {
+  width: 300px;
+  padding: 20px;
+}
+
+h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+#fileInput {
+  margin: 10px 0;
+}
+
+#fileName {
+  margin: 10px 0;
+  word-break: break-all;
+}
+
+#uploadStatus {
+  margin: 10px 0;
+  color: #666;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+progress {
+  width: 100%;
+  height: 20px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+progress::-webkit-progress-value {
+  background-color: #4CAF50;
+  border-radius: 4px;
+}
+
+#doiInput {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
